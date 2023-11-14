@@ -13,7 +13,6 @@ contract SecretCodeNFT is ERC721, Ownable {
 
     event TokenMinted(address indexed to, uint256 indexed tokenId);
 
-    //This NFT contract implements non-transferable NFTs otherwise known as Soulbound NFTs
     error NonTransferable();
 
     constructor(
