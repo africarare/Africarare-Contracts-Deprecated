@@ -12,19 +12,20 @@ import {
 
 describe("Token Deployment Testing", function () {
   let accounts: Signer[];
-  let TokenContractFactory: TokenUpgradeable__factory;
   let Token: TokenUpgradeable;
+  let TokenContractFactory: TokenUpgradeable__factory;
   let TokenV2: TokenUpgradeableV2;
   let TokenContractFactoryV2: TokenUpgradeableV2__factory;
   let owner: any;
 
   beforeEach(async () => {
-    TokenContractFactory = (await ethers.getContractFactory(
-      "TokenUpgradeable"
-    )) as TokenUpgradeable__factory;
-    Token = (await upgrades.deployProxy(TokenContractFactory, {
+    TokenContractFactory = <TokenUpgradeable__factory>(
+      await ethers.getContractFactory("TokenUpgradeable")
+    );
+    // Token = <TokenUpgradeable>await upgrades.deployProxy(TokenContractFactory, { kind: "uups" });
+    Token = <TokenUpgradeable>await upgrades.deployProxy(TokenContractFactory, {
       initializer: "initialize",
-    })) as TokenUpgradeable;
+    });
     await Token.deployed();
     [owner] = await ethers.getSigners();
   });
