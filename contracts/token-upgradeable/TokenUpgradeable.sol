@@ -4,8 +4,8 @@ pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "../access-upgradeable/AuthUpgradeable.sol";
 
 /**
@@ -13,7 +13,6 @@ import "../access-upgradeable/AuthUpgradeable.sol";
  * @author Beau Williams (@beauwilliams)
  * @dev Smart contract for Token
  */
-
 contract TokenUpgradeable is
     Initializable,
     UUPSUpgradeable,
@@ -27,10 +26,14 @@ contract TokenUpgradeable is
         _mint(_msgSender(), 1000000000);
     }
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {
-        initialize();
-    }
-
     function _authorizeUpgrade(address) internal override authorised {}
+
+    // Override _beforeTokenTransfer to avoid delegatecall
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal override {
+        super._beforeTokenTransfer(from, to, amount);
+    }
 }
