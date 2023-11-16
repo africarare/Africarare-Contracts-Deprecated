@@ -3,9 +3,7 @@ pragma solidity >=0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-// TODO: Once a wallet mints, they can't mint again and tokens can't be transferred
 contract SecretCodeNFT is ERC721, Ownable {
     bytes32 private _code;
     string private _baseTokenURI;
@@ -18,8 +16,7 @@ contract SecretCodeNFT is ERC721, Ownable {
     constructor(
         string memory name,
         string memory symbol,
-        string memory initialBaseURI,
-        address initialOwner
+        string memory initialBaseURI
     ) ERC721(name, symbol) {
         _baseTokenURI = initialBaseURI;
     }
@@ -55,29 +52,21 @@ contract SecretCodeNFT is ERC721, Ownable {
         return _baseTokenURI;
     }
 
-    //Overriding the transfer functions to disable transferability
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256,
-        bytes memory
-    ) public pure override {
-        revert NonTransferable();
-    }
-
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256
-    ) public pure override {
-        revert NonTransferable();
-    }
-
-    function transferFrom(
+    // Override the transfer functions to disable transferability
+    function _transfer(
         address from,
         address to,
         uint256 tokenId
-    ) public pure override {
+    ) internal override {
+        revert NonTransferable();
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory _data
+    ) public override {
         revert NonTransferable();
     }
 }
