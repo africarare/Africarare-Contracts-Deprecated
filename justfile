@@ -60,6 +60,8 @@ format:
 	@npm run format
 coverage:
 	@hardhat coverage
+flatten *CONTRACT:
+	@npx hardhat flatten {{CONTRACT}} > flattened.sol
 audit:
 	@npm run audit
 print-audit:
