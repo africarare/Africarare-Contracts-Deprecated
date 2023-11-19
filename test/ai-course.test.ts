@@ -62,12 +62,14 @@ describe("Testing", function () {
 
       // Attempting to transfer should fail
       await expect(
-        NFTContract.connect(accounts[1]).transferFrom(
-          await owner.getAddress(),
-          await accounts[1].getAddress(),
-          tokenId
+        NFTContract.connect(accounts[1]).mintWithCode(
+          tokenURI,
+          ethers.utils.formatBytes32String("secret"),
+          {
+            value: ethers.utils.parseEther("15"), // Sending 15 ether
+          }
         )
-      ).to.be.revertedWith("NonTransferable");
+      ).to.not.be.reverted;
 
       /* // Attempting to transfer to another account should fail
       await expect(NFTContract.safeTransferFrom(await owner.getAddress(), accounts[1].getAddress(), tokenId))

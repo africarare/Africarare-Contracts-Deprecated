@@ -28,6 +28,10 @@ contract AfricarareAICourseCert is ERC721URIStorage, Ownable {
         _code = code;
     }
 
+    function isEligibleToMint(address addr) external view returns (bool) {
+        return !_hasMinted[addr];
+    }
+
     function mintWithCode(
         string memory tokenURI,
         bytes32 providedCode
