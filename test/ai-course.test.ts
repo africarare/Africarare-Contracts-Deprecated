@@ -53,23 +53,24 @@ describe("Testing", function () {
 
     it("Tokens should not be transferable", async function () {
       const tokenURI = "https://example.com/metadata/1";
-      await NFTContract.mintWithCode(
+      NFTContract.connect(accounts[0]).mintWithCode(
         tokenURI,
-        ethers.utils.formatBytes32String(inputString)
+        ethers.utils.formatBytes32String(inputString),
+        {
+          value: ethers.utils.parseEther("15"), // Sending 15 ether
+        }
       );
 
       const tokenId = 1;
 
       // Attempting to transfer should fail
       await expect(
-        NFTContract.connect(accounts[1]).mintWithCode(
-          tokenURI,
-          ethers.utils.formatBytes32String("secret"),
-          {
-            value: ethers.utils.parseEther("15"), // Sending 15 ether
-          }
+        NFTContract.connect(accounts[1]).transferFrom(
+          await owner.getAddress(),
+          await accounts[1].getAddress(),
+          tokenId
         )
-      ).to.not.be.reverted;
+      ).to.be.revertedWith("NonTransferable");
 
       /* // Attempting to transfer to another account should fail
       await expect(NFTContract.safeTransferFrom(await owner.getAddress(), accounts[1].getAddress(), tokenId))
