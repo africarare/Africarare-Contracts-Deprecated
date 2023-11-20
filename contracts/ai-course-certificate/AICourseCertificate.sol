@@ -28,6 +28,15 @@ contract AfricarareAICourseCert is ERC721URIStorage, Ownable {
         _code = code;
     }
 
+    function getTokenIdByOwner(address addr) external view returns (uint256) {
+        for (uint256 tokenId = 1; tokenId <= _totalSupply; tokenId++) {
+            if (_ownerOf(tokenId) == addr) {
+                return tokenId;
+            }
+        }
+        return 0;
+    }
+
     function isEligibleToMint(address addr) external view returns (bool) {
         return !_hasMinted[addr];
     }
