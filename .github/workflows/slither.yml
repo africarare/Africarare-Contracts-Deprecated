@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: crytic/slither-action@v0.1.1
+      - uses: crytic/slither-action@v0.4.2
         continue-on-error: true
         id: slither
         with:
